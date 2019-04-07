@@ -1,0 +1,73 @@
+<div class="panel panel-default panelTitle panel-body" style="margin-top: 30px; padding-left: 20px">
+
+  Total Records : {{categories.length}} <p></p>
+
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary" style="float: right; margin-bottom: 10px;" data-toggle="modal" data-target="#addCategoryDialog">
+    Add New Category
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="addCategoryDialog" tabindex="-1" role="dialog" aria-labelledby="addCategoryDialogTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCategoryDialogTitle">New Category</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form class="form form-group" #newCategoryForm="ngForm" (ngSubmit)="newCategoryForm.form.valid && addNewCategory()" novalidate>
+          <div class="modal-body">
+            <h3>
+              {{registrationMessage}}
+            </h3>
+
+            <input class="form-group form-control" [(ngModel)]="categoryRequest.name" #name="ngModel" required minlength="3" name="name" placeholder="Category name" />
+            <div *ngIf="newCategoryForm.submitted && name.invalid && (name.dirty || name.touched)"
+                 class="alert alert-danger">
+              <div *ngIf="name.errors.required">
+                Category name is required.
+              </div>
+              <div *ngIf="name.errors.minlength">
+                Category name must be at least 3 characters long.
+              </div>
+            </div>
+
+            <input class="form-group form-control" [(ngModel)]="categoryRequest.description" #description="ngModel" required minlength="3" name="description" placeholder="Category description" />
+            <div *ngIf="newCategoryForm.submitted && description.invalid && (description.dirty || description.touched)"
+                 class="alert alert-danger">
+              <div *ngIf="description.errors.required">
+                Description is required.
+              </div>
+              <div *ngIf="description.errors.minlength">
+                Description must be at least 3 characters long.
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="resetModal()" data-dismiss="modal">Close</button>
+            <input type="submit" class="btn btn-primary" value="Save new category"/>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <table class="table table-hover table-striped table-bordered table-responsive" style="margin-top: 30px;">
+
+    <thead>
+    <th scope="col">NAME</th>
+    <th scope="col">DESCRIPTION</th>
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let category of categories">
+      <td>{{category.name}}</td>
+      <td>{{category.description}}</td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>

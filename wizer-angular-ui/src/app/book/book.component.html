@@ -1,0 +1,142 @@
+<div class="panel panel-default panelTitle panel-body" style="margin-top: 30px; padding-left: 20px">
+
+  Total Records : {{paginationBaseModel.totalElements}} <p></p>
+  Total Page : {{paginationBaseModel.totalPages}} <p></p>
+  Current Page : {{paginationBaseModel.number+1}} <p></p>
+
+
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary" style="float: right; margin-bottom: 10px;" data-toggle="modal" data-target="#addBookDialog">
+    Add New Book
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="addBookDialog" tabindex="-1" role="dialog" aria-labelledby="addBookDialogTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addBookDialogTitle">New Book</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form class="form form-group" #newBookForm="ngForm" (ngSubmit)="newBookForm.form.valid && addNewBook()" novalidate>
+        <div class="modal-body">
+          <h3>
+            {{registrationMessage}}
+          </h3>
+
+            <input class="form-group form-control" [(ngModel)]="bookRequest.title" #title="ngModel" required minlength="3" name="title" placeholder="Title of the book" />
+            <div *ngIf="newBookForm.submitted && title.invalid && (title.dirty || title.touched)"
+                 class="alert alert-danger">
+              <div *ngIf="title.errors.required">
+                Title is required.
+              </div>
+              <div *ngIf="title.errors.minlength">
+                Title must be at least 3 characters long.
+              </div>
+            </div>
+
+            <input class="form-group form-control" [(ngModel)]="bookRequest.author" #author="ngModel" required minlength="3" name="author" placeholder="Author of the book" />
+          <div *ngIf="newBookForm.submitted && author.invalid && (author.dirty || author.touched)"
+               class="alert alert-danger">
+            <div *ngIf="author.errors.required">
+              Author is required.
+            </div>
+            <div *ngIf="author.errors.minlength">
+              Author must be at least 3 characters long.
+            </div>
+          </div>
+
+          <input class="form-group form-control" [(ngModel)]="bookRequest.isbn" #isbn="ngModel" required minlength="10" name="isbn" placeholder="ISBN of the book" />
+
+          <div *ngIf="newBookForm.submitted && isbn.invalid && (isbn.dirty || isbn.touched)"
+               class="alert alert-danger">
+            <div *ngIf="isbn.errors.required">
+              ISBN is required.
+            </div>
+            <div *ngIf="isbn.errors.minlength">
+              ISBN must be at least 10 characters long.
+            </div>
+          </div>
+
+          <select class="form-group form-control" [(ngModel)]="bookRequest.categoryName" required #categoryName="ngModel" name="categoryName">
+              <option value="">--Select Category--</option>
+              <option *ngFor="let category of categories" value="{{category.name}}">{{category.name}}</option>
+            </select>
+
+          <div *ngIf="newBookForm.submitted && categoryName.invalid && (categoryName.dirty || categoryName.touched)"
+               class="alert alert-danger">
+            <div *ngIf="categoryName.errors.required">
+              Category is required.
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="resetModal()" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-primary" value="Save new book"/>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <table class="table table-hover table-striped table-bordered table-responsive">
+
+    <thead class="form form-inline">
+    <th scope="col">
+      <input type="text" class="form-control" [formControl]="authorSearchValue" placeholder="Author" />
+    </th>
+    <th scope="col">
+      <input type="text" class="form-control" [formControl]="titleSearchValue" placeholder="Title" />
+    </th>
+    <th scope="col">
+      <input type="text" class="form-control" [formControl]="isbnSearchValue" placeholder="isbn" />
+    </th>
+    <th scope="col">
+      <select class="form-control" [formControl]="categorySearchValue">
+        <option value="">--Select category--</option>
+        <option *ngFor="let category of categories" value="{{category.name}}">{{category.name}}</option>
+      </select>
+    </th>
+    <th scope="col">
+      <button type="button" class="form-control button ui-button-primary" (click)="searchwithParams()"> Search </button>
+    </th>
+    </thead>
+
+  </table>
+
+  <table class="table table-hover table-striped table-bordered table-responsive" style="margin-top: 30px;">
+
+    <thead>
+    <th scope="col">AUTHOR</th>
+    <th scope="col">TITLE</th>
+    <th scope="col">ISBN</th>
+    <th scope="col">CATEGORY</th>
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let book of paginationBaseModel.content">
+      <td>{{book.author}}</td>
+      <td>{{book.title}}</td>
+      <td>{{book.isbn}}</td>
+      <td>{{book.category.name}}</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <nav aria-label="Navigation" style="float: right;">
+    <ul class="pagination justify-content-end">
+      <li class="page-item " (click)="fetchPrevious()">
+        <a class="page-link" href="#" >Previous</a>
+      </li>
+      <li class="page-item" (click)="fetchNext()">
+        <a class="page-link" href="#" >Next</a>
+      </li>
+    </ul>
+  </nav>
+
+
+
+</div>
+
